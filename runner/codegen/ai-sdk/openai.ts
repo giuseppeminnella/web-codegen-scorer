@@ -6,6 +6,19 @@ export const OPENAI_MODELS = [
   'gpt-5.1-thinking-low',
   'gpt-5.1-thinking-high',
   'gpt-5.1-thinking-medium',
+  'gpt-5.2-no-thinking',
+  'gpt-5.2-thinking-low',
+  'gpt-5.2-thinking-medium',
+  'gpt-5.2-thinking-high',
+  'gpt-5.2-thinking-xhigh',
+  'gpt-5.4-no-thinking',
+  'gpt-5.4-thinking-low',
+  'gpt-5.4-thinking-medium',
+  'gpt-5.4-thinking-high',
+  'gpt-5.4-mini-no-thinking',
+  'gpt-5.4-mini-thinking-low',
+  'gpt-5.4-mini-thinking-medium',
+  'gpt-5.4-mini-thinking-high',
 ] as const;
 
 export async function getAiSdkModelOptionsForOpenAI(
@@ -19,16 +32,41 @@ export async function getAiSdkModelOptionsForOpenAI(
     case 'gpt-5.1-thinking-low':
     case 'gpt-5.1-thinking-medium':
     case 'gpt-5.1-thinking-high':
+    case 'gpt-5.2-no-thinking':
+    case 'gpt-5.2-thinking-low':
+    case 'gpt-5.2-thinking-medium':
+    case 'gpt-5.2-thinking-high':
+    case 'gpt-5.2-thinking-xhigh':
+    case 'gpt-5.4-no-thinking':
+    case 'gpt-5.4-thinking-low':
+    case 'gpt-5.4-thinking-medium':
+    case 'gpt-5.4-thinking-high':
+    case 'gpt-5.4-mini-no-thinking':
+    case 'gpt-5.4-mini-thinking-low':
+    case 'gpt-5.4-mini-thinking-medium':
+    case 'gpt-5.4-mini-thinking-high':
       let reasoningEffort: string = 'none';
-      if (modelName === 'gpt-5.1-thinking-high') {
+      if (modelName.endsWith('-thinking-xhigh')) {
+        reasoningEffort = 'xhigh';
+      } else if (modelName.endsWith('-thinking-high')) {
         reasoningEffort = 'high';
-      } else if (modelName === 'gpt-5.1-thinking-medium') {
+      } else if (modelName.endsWith('-thinking-medium')) {
         reasoningEffort = 'medium';
-      } else if (modelName === 'gpt-5.1-thinking-low') {
+      } else if (modelName.endsWith('-thinking-low')) {
         reasoningEffort = 'low';
       }
+
+      let apiModelName: string = 'gpt-5.1';
+      if (modelName.startsWith('gpt-5.2')) {
+        apiModelName = 'gpt-5.2';
+      } else if (modelName.startsWith('gpt-5.4-mini')) {
+        apiModelName = 'gpt-5.4-mini';
+      } else if (modelName.startsWith('gpt-5.4')) {
+        apiModelName = 'gpt-5.4';
+      }
+
       return {
-        model: provideModel('gpt-5.1'),
+        model: provideModel(apiModelName),
         providerOptions: {
           openai: {
             reasoningEffort,

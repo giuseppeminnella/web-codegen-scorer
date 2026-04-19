@@ -10,9 +10,21 @@ export const ANTHROPIC_MODELS = [
   'claude-opus-4.5-no-thinking',
   'claude-opus-4.5-with-thinking-16k',
   'claude-opus-4.5-with-thinking-32k',
+  'claude-opus-4.6-no-thinking',
+  'claude-opus-4.6-with-thinking-16k',
+  'claude-opus-4.6-with-thinking-32k',
+  'claude-opus-4.7-no-thinking',
+  'claude-opus-4.7-with-thinking-16k',
+  'claude-opus-4.7-with-thinking-32k',
   'claude-sonnet-4.5-no-thinking',
   'claude-sonnet-4.5-with-thinking-16k',
   'claude-sonnet-4.5-with-thinking-32k',
+  'claude-sonnet-4.6-no-thinking',
+  'claude-sonnet-4.6-with-thinking-16k',
+  'claude-sonnet-4.6-with-thinking-32k',
+  'claude-haiku-4.5-no-thinking',
+  'claude-haiku-4.5-with-thinking-16k',
+  'claude-haiku-4.5-with-thinking-32k',
 ] as const;
 
 export async function getAiSdkModelOptionsForAnthropic(
@@ -28,9 +40,21 @@ export async function getAiSdkModelOptionsForAnthropic(
     case 'claude-opus-4.5-no-thinking':
     case 'claude-opus-4.5-with-thinking-16k':
     case 'claude-opus-4.5-with-thinking-32k':
+    case 'claude-opus-4.6-no-thinking':
+    case 'claude-opus-4.6-with-thinking-16k':
+    case 'claude-opus-4.6-with-thinking-32k':
+    case 'claude-opus-4.7-no-thinking':
+    case 'claude-opus-4.7-with-thinking-16k':
+    case 'claude-opus-4.7-with-thinking-32k':
     case 'claude-sonnet-4.5-no-thinking':
     case 'claude-sonnet-4.5-with-thinking-16k':
-    case 'claude-sonnet-4.5-with-thinking-32k': {
+    case 'claude-sonnet-4.5-with-thinking-32k':
+    case 'claude-sonnet-4.6-no-thinking':
+    case 'claude-sonnet-4.6-with-thinking-16k':
+    case 'claude-sonnet-4.6-with-thinking-32k':
+    case 'claude-haiku-4.5-no-thinking':
+    case 'claude-haiku-4.5-with-thinking-16k':
+    case 'claude-haiku-4.5-with-thinking-32k': {
       const thinkingEnabled = modelName.includes('-with-thinking');
       const thinkingBudget = !thinkingEnabled
         ? undefined
@@ -42,6 +66,14 @@ export async function getAiSdkModelOptionsForAnthropic(
         apiModelName = 'claude-opus-4-1';
       } else if (modelName.includes('opus-4.5')) {
         apiModelName = 'claude-opus-4-5';
+      } else if (modelName.includes('opus-4.6')) {
+        apiModelName = 'claude-opus-4-6';
+      } else if (modelName.includes('opus-4.7')) {
+        apiModelName = 'claude-opus-4-7';
+      } else if (modelName.includes('sonnet-4.6')) {
+        apiModelName = 'claude-sonnet-4-6';
+      } else if (modelName.includes('haiku-4.5')) {
+        apiModelName = 'claude-haiku-4-5';
       }
       const model = provideModel(apiModelName);
       return {

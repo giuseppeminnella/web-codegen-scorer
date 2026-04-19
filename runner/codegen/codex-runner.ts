@@ -8,6 +8,11 @@ const MODEL_MAPPING: Record<string, string> = {
   'openai-o3': 'o3',
   'openai-o4-mini': 'o4-mini',
   'openai-gpt-5': 'gpt-5-codex',
+  'openai-gpt-5.2': 'gpt-5.2',
+  'openai-gpt-5.2-codex': 'gpt-5.2-codex',
+  'openai-gpt-5.3-codex': 'gpt-5.3-codex',
+  'openai-gpt-5.4': 'gpt-5.4',
+  'openai-gpt-5.4-mini': 'gpt-5.4-mini',
 };
 
 /** Runner that generates code using Codex. */

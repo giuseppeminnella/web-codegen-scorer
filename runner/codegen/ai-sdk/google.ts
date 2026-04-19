@@ -9,6 +9,9 @@ export const GOOGLE_MODELS = [
   'gemini-2.5-flash-with-thinking-24k',
   'gemini-2.5-pro',
   'gemini-3-pro-preview',
+  'gemini-3.1-pro-preview',
+  'gemini-3-flash',
+  'gemini-3.1-flash-lite',
 ] as const;
 
 export async function getAiSdkModelOptionsForGoogle(
@@ -22,6 +25,9 @@ export async function getAiSdkModelOptionsForGoogle(
     case 'gemini-2.5-flash':
     case 'gemini-2.5-pro':
     case 'gemini-3-pro-preview':
+    case 'gemini-3.1-pro-preview':
+    case 'gemini-3-flash':
+    case 'gemini-3.1-flash-lite':
       return {
         model: provideModel(modelName),
         providerOptions: {
