@@ -29,12 +29,14 @@ import {getAiSdkModelOptionsForGoogle, GOOGLE_MODELS} from './google.js';
 import {getAiSdkModelOptionsForOpenAI, OPENAI_MODELS} from './openai.js';
 import {AiSdkModelOptions} from './ai-sdk-model-options.js';
 import {getAiSdkModelOptionsForXai, XAI_MODELS} from './xai.js';
+import {getAiSdkModelOptionsForOllama, OLLAMA_MODELS} from './ollama.js';
 
 const SUPPORTED_MODELS = [
   ...GOOGLE_MODELS,
   ...ANTHROPIC_MODELS,
   ...OPENAI_MODELS,
   ...XAI_MODELS,
+  ...OLLAMA_MODELS,
 ] as const;
 
 // Increased to a very high value as we rely on an actual timeout
@@ -191,7 +193,8 @@ export class AiSdkRunner implements LlmRunner {
       (await getAiSdkModelOptionsForGoogle(request.model)) ??
       (await getAiSdkModelOptionsForAnthropic(request.model)) ??
       (await getAiSdkModelOptionsForOpenAI(request.model)) ??
-      (await getAiSdkModelOptionsForXai(request.model));
+      (await getAiSdkModelOptionsForXai(request.model)) ??
+      (await getAiSdkModelOptionsForOllama(request.model));
     if (result === null) {
       throw new Error(`Unexpected unsupported model: ${request.model}`);
     }

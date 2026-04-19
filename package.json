@@ -77,6 +77,7 @@
     "limiter": "^3.0.0",
     "marked": "^17.0.1",
     "node-fetch": "^3.3.2",
+    "ollama-ai-provider-v2": "^3.5.0",
     "p-queue": "^9.1.0",
     "puppeteer": "^24.35.0",
     "sass": "^1.97.2",
