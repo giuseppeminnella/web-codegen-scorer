@@ -28,7 +28,123 @@
 @let comparisonData = this.comparisonModelData();
 
 @if (comparisonData) {
+  <section
+    class="card screenshot-comparison"
+    [style.--comparison-columns]="screenshotColumnCount()"
+  >
+    <div class="screenshot-comparison-header">
+      <div>
+        <h2>Screenshots</h2>
+        @let screenshotRows = this.screenshotRows();
+        @if (screenshotRows.length) {
+          <div class="screenshot-count">{{ screenshotRows.length }} apps with screenshots</div>
+        }
+      </div>
+    </div>
+
+    @if (isLoadingScreenshots()) {
+      <message-spinner message="Loading screenshots" />
+    } @else if (screenshotError()) {
+      <div class="callout warn">{{ screenshotError() }}</div>
+    } @else {
+      @let screenshotRows = this.screenshotRows();
+      @if (screenshotRows.length) {
+        <div class="screenshot-matrix-scroll">
+          <div class="screenshot-matrix">
+            <div class="screenshot-matrix-heading screenshot-app-heading">App</div>
+            @for (report of screenshotReportSelections(); track report.groupId) {
+              <div
+                class="screenshot-matrix-heading screenshot-report-heading"
+                [title]="report.reportName"
+              >
+                {{ report.reportName }}
+              </div>
+            }
+
+            @for (row of screenshotRows; track row.key) {
+              <div class="screenshot-row">
+                <div class="screenshot-prompt-cell" [title]="row.promptName">
+                  {{ row.displayName }}
+                </div>
+
+                @for (cell of row.cells; track cell.groupId) {
+                  <div class="screenshot-result-cell">
+                    @if (cell.screenshotUrl) {
+                      <button
+                        type="button"
+                        class="screenshot-thumb"
+                        [attr.aria-label]="'Open screenshot comparison for ' + row.displayName"
+                        (click)="openScreenshotOverlay(row)"
+                      >
+                        <img
+                          [src]="cell.screenshotUrl"
+                          [alt]="cell.reportName + ' screenshot for ' + row.displayName"
+                        />
+                      </button>
+                    } @else {
+                      <div class="screenshot-thumb missing">No screenshot</div>
+                    }
+                    <div class="screenshot-cell-meta">{{ cell.scoreLabel }}</div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="empty-screenshots">No screenshots available for the selected reports.</div>
+      }
+    }
+  </section>
+
   <comparison-score-distribution class="card" [data]="comparisonData" />
-  <comparison-build-distribution  class="card" [data]="comparisonData" />
-  <comparison-runtime-distribution  class="card" [data]="comparisonData" />
+  <comparison-build-distribution class="card" [data]="comparisonData" />
+  <comparison-runtime-distribution class="card" [data]="comparisonData" />
+}
+
+@if (activeScreenshotRow(); as activeRow) {
+  <div
+    class="screenshot-overlay"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="'Screenshot comparison for ' + activeRow.displayName"
+    (click)="closeScreenshotOverlay()"
+  >
+    <div class="screenshot-overlay-content" (click)="$event.stopPropagation()">
+      <div class="screenshot-overlay-header">
+        <div>
+          <h2>{{ activeRow.displayName }}</h2>
+          <div class="screenshot-count">{{ activeRow.availableScreenshots }} screenshots</div>
+        </div>
+        <button
+          type="button"
+          class="screenshot-overlay-close"
+          aria-label="Close screenshot comparison"
+          (click)="closeScreenshotOverlay()"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="screenshot-overlay-grid">
+        @for (cell of activeRow.cells; track cell.groupId) {
+          <div class="screenshot-overlay-item">
+            <div class="screenshot-overlay-title">
+              <span [title]="cell.reportName">{{ cell.reportName }}</span>
+              <span>{{ cell.scoreLabel }}</span>
+            </div>
+            @if (cell.screenshotUrl) {
+              <img
+                class="screenshot-overlay-image"
+                [src]="cell.screenshotUrl"
+                [alt]="cell.reportName + ' screenshot for ' + activeRow.displayName"
+              />
+            } @else {
+              <div class="screenshot-overlay-missing">No screenshot</div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
 }
